@@ -6,23 +6,22 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 
-
 @WebServlet(name = "HelloWorldServlet", urlPatterns = "/hello")
 public class HelloWorldServlet extends HttpServlet {
 
-    private int counter=0;
+    private int counter = 0;
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 //        response.setContentType("text/html");
-        PrintWriter out= response.getWriter();
+        PrintWriter out = response.getWriter();
         counter += 1;
         response.getWriter().println("<h1>The count is " + counter + ".</h1>");
         out.println("Hello" +
-                "<h1 align = \"center\">This does something</h1><h2 align = \"center\">This should be in h2</h2><h3 align = \"center\">This should be in h3</h3><h4 align = \"center\">This should be in h4</h4><h5 align = \"center\">This should be in h5</h5><h6 align = \"center\">This should be in h6</h6>+" +
-                "<body bgcolor =\"#f0f0f0\"");
+                "<h1 align = \"center\">This does something</h1><h2 align = \"center\">This should be in h2</h2><h3 align = \"center\">This should be in h3</h3><h4 align = \"center\">This should be in h4</h4><h5 align = \"center\">This should be in h5</h5><h6 align = \"center\">This should be in h6</h6><body bgcolor =\"#f0f0f0\"");
 
         String searchedName = request.getParameter("name");
-        if(searchedName == null ) {
+        if (searchedName == null) {
             searchedName = "World";
         }
 
