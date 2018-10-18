@@ -2,6 +2,7 @@ package com.codeup.adlister.dao;
 
 import com.codeup.adlister.models.Ad;
 import com.mysql.cj.jdbc.Driver;
+//import sun.security.krb5.Config;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.util.List;
 
 public class MySQLAdsDao implements Ads {
     private Connection connection = null;
+
 
     public MySQLAdsDao(Config config) {
         try {
@@ -28,10 +30,10 @@ public class MySQLAdsDao implements Ads {
 
     @Override
     public List<Ad> all() {
-        Statement stmt = null;
+        PreparedStatement stmt = null;
         try {
-            stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM ads");
+            stmt = connection.prepareStatement("select * from ads");
+            ResultSet rs = stmt.executeQuery();
             return createAdsFromResults(rs);
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving all ads.", e);
@@ -40,9 +42,13 @@ public class MySQLAdsDao implements Ads {
 
     @Override
     public Long insert(Ad ad) {
+        String insertQuery="insert into ads(user_id,title,description) values (?,?,?)";
         try {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate(createInsertQuery(ad), Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stmt = connection.prepareStatement(insertQuery,Statement.RETURN_GENERATED_KEYS);
+            stmt.setLong(1,ad.getUserId());
+            stmt.setString(2,ad.getTitle());
+            stmt.setString(3,ad.getDescription());
+            stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             rs.next();
             return rs.getLong(1);
